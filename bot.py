@@ -71,7 +71,7 @@ class Robber(vk_api.VkApi):
 			if not self.doc_send_error:
 				answer = str(datetime.now().strftime('%d.%m.%Y %H:%M:%S'))
 			else:
-				answer = 'Incorrect file-key'
+				answer = 'Incorrect file-key or file size is 0 (empty file)'
 				self.doc_send_error = True 
 		elif text == 'Turn off':
 			raise SystemExit
@@ -218,15 +218,12 @@ class Robber(vk_api.VkApi):
 			doc_id = doc['doc']['id']
 
 			attachment = f'doc{owner_id}_{doc_id}'
-
-		except (ValueError, KeyError):
-
+		except (KeyError, ValueError):
 			self.doc_send_error = True
 			self.send_message(user_id=config.my_id, message='Error while sending the file.')
 			attachment = ''
-
-		finally:
-
+		else:
+			self.doc_send_error = False
 			return attachment
 
 	def start(self):
